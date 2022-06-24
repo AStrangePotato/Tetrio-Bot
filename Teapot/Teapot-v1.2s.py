@@ -1,12 +1,12 @@
 import numpy as np
-import detect
+import lib.detect
 import copy
-import heuristic as hr
-from move import *
+import lib.heuristic as hr
+from lib.move import *
 import time
 import keyboard
 import random
-from visuals import draw
+from lib.visuals import draw
 
 
 time.sleep(3)
