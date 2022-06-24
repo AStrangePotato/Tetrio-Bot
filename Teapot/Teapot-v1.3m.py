@@ -1,14 +1,9 @@
 import numpy as np
-import lib.detect
-from lib.visuals import draw
-import lib.heuristic as hr
-from lib.move import *
-import copy
-
+from lib import detect, heuristic, visuals, move
 import time
 import keyboard
 import random
-
+from copy import deepcopy
 
 
 time.sleep(3)
@@ -55,9 +50,8 @@ def lowestBlocks(piece):
     return lowestBlocks
             
 def drop(piece, pos, board):
-
-    #if board[0][pos] != 0 or board[0][pos] is not None:
-        #return "Invalid drop location. Spot filled."
+    if board[0][pos] != 0:
+        return "Invalid drop location. Spot filled."
     
     altitude = 1
     lowestTiles = lowestBlocks(piece)
@@ -91,11 +85,44 @@ def drop(piece, pos, board):
         altitude += 1
     return board
 
+def lineClear(board):
+    for row in range(20):
+        cleared = True
+        for tile in range(10):
+            if board[row][tile] == 0:
+                cleared = False
+                break
+                
+        if cleared:
+            board.pop(row)
+            board.insert(0, [0,0,0,0,0,0,0,0,0,0])
+
+boardMaster = [[0,0,0,0,0,0,0,0,0,0],
+
+               [0,0,0,0,0,0,0,0,0,0],
+               [0,0,0,0,0,0,0,0,0,0],
+               [0,0,0,0,0,0,0,0,0,0],
+               [0,0,0,0,0,0,0,0,0,0],
+               [0,0,0,0,0,0,0,0,0,0],
+               [0,0,0,0,0,0,0,0,0,0],
+               [0,0,0,0,0,0,0,0,0,0],
+               [0,0,0,0,0,0,0,0,0,0],
+               [0,0,0,0,0,0,0,0,0,0],
+               [0,0,0,0,0,0,0,0,0,0],
+               [0,0,0,0,0,0,0,0,0,0],
+               [0,0,0,0,0,0,0,0,0,0],
+               [0,0,0,0,0,0,0,0,0,0],
+               [0,0,0,0,0,0,0,0,0,0],
+               [0,0,0,0,0,0,0,0,0,0],
+               [0,0,0,0,0,0,0,0,0,0],
+               [0,0,0,0,0,0,0,0,0,0],
+               [0,0,0,0,0,0,0,0,0,0],
+               [0,0,0,0,0,0,0,0,0,0]]
 
 while True:
     pieceInfo = detect.pieceState()
     if pieceInfo[0] is not None:
-        hold()
+        move.hold()
         held = pieces[pieceInfo[0]]
         current = pieces[pieceInfo[1]]
         break
@@ -118,15 +145,14 @@ while True:
     best = [-99999, False, 0,0] #(score, held t/f, [rotation, position])
 
     #!SIMULATE DROPS!#
-    boardMaster = detect.boardState()
 
     if current is not None:
         for rotation in range(len(current)):
             maxPos = 11 - len(current[rotation][0])
             for pos in range(maxPos):
-                boardSnapshot = copy.deepcopy(boardMaster) #new instance
+                boardSnapshot = deepcopy(boardMaster) #new instance
                 simulBoard = drop(current[rotation], pos, boardSnapshot)
-                score = hr.analyze(simulBoard)
+                score = heuristic.analyze(simulBoard)
 
                 if score == best[0] and random.uniform(0,1) < 0.4: #left bias
                     best = [score, False, rotation, pos] 
@@ -139,9 +165,9 @@ while True:
         for rotation in range(len(held)):
             maxPos = 11 - len(held[rotation][0])
             for pos in range(maxPos):
-                boardSnapshot = copy.deepcopy(boardMaster) #new instance
+                boardSnapshot = deepcopy(boardMaster) #new instance
                 simulBoard = drop(held[rotation], pos, boardSnapshot)
-                score = hr.analyze(simulBoard)
+                score = heuristic.analyze(simulBoard)
 
                 if score == best[0] and random.uniform(0,1) < 0.35: #left bias
                     best = [score, True, rotation, pos] 
@@ -154,11 +180,12 @@ while True:
         bestRot = best[2]
         bestPos = best[3]
         if best[1]: #if the optimal score was achieved with held piece
-            hold()
+            move.hold()
             held, current = current, held
 
-        place(bestRot, bestPos, getKey(current))
+        drop(current[bestRot], bestPos, boardMaster)
+        move.place(bestRot, bestPos, getKey(current))
+        lineClear(boardMaster)
+        time.sleep(0.06)
 
-        time.sleep(0.04)
-
-draw(boardMaster)
+visuals.draw(boardMaster)
