@@ -78,5 +78,5 @@ def place(dir, pos, piece):
     keyboard.press_and_release('space')
 
 def hold():
-    time.sleep(0.005)
+    time.sleep(0.003)
     keyboard.press_and_release('c')
