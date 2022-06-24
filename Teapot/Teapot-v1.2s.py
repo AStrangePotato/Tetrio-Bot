@@ -1,12 +1,9 @@
 import numpy as np
-import lib.detect
-import copy
-import lib.heuristic as hr
-from lib.move import *
+from lib import detect, heuristic, visuals, move
 import time
 import keyboard
 import random
-from lib.visuals import draw
+from copy import deepcopy
 
 
 time.sleep(3)
@@ -125,7 +122,7 @@ boardMaster = [[0,0,0,0,0,0,0,0,0,0],
 while True:
     pieceInfo = detect.pieceState()
     if pieceInfo[0] is not None:
-        hold()
+        move.hold()
         held = pieces[pieceInfo[0]]
         current = pieces[pieceInfo[1]]
         break
@@ -153,9 +150,9 @@ while True:
         for rotation in range(len(current)):
             maxPos = 11 - len(current[rotation][0])
             for pos in range(maxPos):
-                boardSnapshot = copy.deepcopy(boardMaster) #new instance
+                boardSnapshot = deepcopy(boardMaster) #new instance
                 simulBoard = drop(current[rotation], pos, boardSnapshot)
-                score = hr.analyze(simulBoard)
+                score = heuristic.analyze(simulBoard)
 
                 if score == best[0] and random.uniform(0,1) < 0.4: #left bias
                     best = [score, False, rotation, pos] 
@@ -168,9 +165,9 @@ while True:
         for rotation in range(len(held)):
             maxPos = 11 - len(held[rotation][0])
             for pos in range(maxPos):
-                boardSnapshot = copy.deepcopy(boardMaster) #new instance
+                boardSnapshot = deepcopy(boardMaster) #new instance
                 simulBoard = drop(held[rotation], pos, boardSnapshot)
-                score = hr.analyze(simulBoard)
+                score = heuristic.analyze(simulBoard)
 
                 if score == best[0] and random.uniform(0,1) < 0.35: #left bias
                     best = [score, True, rotation, pos] 
@@ -183,12 +180,12 @@ while True:
         bestRot = best[2]
         bestPos = best[3]
         if best[1]: #if the optimal score was achieved with held piece
-            hold()
+            move.hold()
             held, current = current, held
 
         drop(current[bestRot], bestPos, boardMaster)
-        place(bestRot, bestPos, getKey(current))
+        move.place(bestRot, bestPos, getKey(current))
         lineClear(boardMaster)
         time.sleep(0.06)
 
-draw(boardMaster)
+visuals.draw(boardMaster)
