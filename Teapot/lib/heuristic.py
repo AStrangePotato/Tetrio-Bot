@@ -101,7 +101,7 @@ def tetrisSlot(board, well):
     if nonClearI > cleared:
         return 0.4
     if nonClearI >= cleared:
-        return 0.1
+        return 0.2
 
     return 0
 
