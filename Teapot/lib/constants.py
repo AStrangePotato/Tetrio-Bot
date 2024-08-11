@@ -42,3 +42,5 @@ pieces = {
             'o':[[['o', 'o'], ['o', 'o']]],
             None:None 
         }
+
+

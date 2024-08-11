@@ -26,13 +26,13 @@ def clearedLines(board):
             
     match clearedLines:
         case 4:
-            clearedLines += 10 #tetris gucci
+            clearedLines *= 10 #tetris gucci af
         case 3:
             clearedLines *= 0.8 #triple are meh
         case 2:
             clearedLines += 1.5 #doubles are value
         case 1:
-            clearedLines *= 0.32 #singles are not value
+            clearedLines *= 1 #singles are ok cause im fast
             
     return clearedLines
 
@@ -125,7 +125,7 @@ def analyze(board):
     a = -0.530213 #aggregate
     b =  0.760667 #increase tetris score after mvp
     c = -0.694587 #hole
-    d = -0.229412 #bumpiness
+    d = -0.420690 #bumpiness
     e = -0.174278 #blockade
     f = -4.042069 #tetris well
     g = -0.420420 #i piece dependencies

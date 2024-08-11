@@ -1,5 +1,21 @@
-import keyboard
 import time
+import ctypes
+
+
+lookup = {
+    'a': 0x41,  # VK_A
+    'z': 0x5A,  # VK_Z
+    'x': 0x58,  # VK_X
+    'left': 0x25,  # VK_LEFT
+    'right': 0x27,  # VK_RIGHT
+    'space': 0x20,  # VK_SPACE
+    'c': 0x43   # VK_C
+}
+
+def press_and_release(key):
+    KEY_CODE = lookup[key]
+    ctypes.windll.user32.keybd_event(KEY_CODE, 0, 0, 0)
+    ctypes.windll.user32.keybd_event(KEY_CODE, 0, 2, 0)
 
 
 def rotationOffset(piece, dir):
@@ -52,11 +68,11 @@ def place(dir, pos, piece):
     #0:no rotat, 1:cw rotat, 2: 180 rotat, 3: ccw rotat
     rotationModifier = rotationOffset(piece, dir)
     if dir == 1:
-        keyboard.press_and_release('x')
+        press_and_release('x')
     elif dir == 3:
-        keyboard.press_and_release('z')
+        press_and_release('z')
     elif dir == 2:
-        keyboard.press_and_release('a')
+        press_and_release('a')
 
 
     #!MOVEMENT!#
@@ -64,16 +80,16 @@ def place(dir, pos, piece):
     movement = -(3 - pos + rotationModifier)
     for i in range(abs(movement)):
         if movement < 0:
-            keyboard.press_and_release('left')
+            press_and_release('left')
         else:
-            keyboard.press_and_release('right')
+            press_and_release('right')
 
 
 
     #!DROP!#
-    time.sleep(0.03)
-    keyboard.press_and_release('space')
+    time.sleep(0.003)
+    press_and_release('space')
 
 def hold():
-    time.sleep(0.01)
-    keyboard.press_and_release('c')
+    time.sleep(0.003)
+    press_and_release('c')

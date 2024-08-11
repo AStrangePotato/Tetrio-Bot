@@ -25,7 +25,7 @@ def lowestBlocks(piece):
                 break
             
     return lowestBlocks
-            
+
 def drop(piece, pos, board):
     #if board[0][pos] != 0 or board[0][pos] is not None:
         #return "Invalid drop location. Spot filled."
@@ -63,7 +63,8 @@ def drop(piece, pos, board):
     return board
 
 def searchDrops(boardMaster, piece):
-    best = [-99999, 0, 0] #score, rotation, position
+    best = [-float("inf"), -1, -1] #score, rotation, position
+
     for rotation in range(len(piece)):
         maxPos = 11 - len(piece[rotation][0])
         for pos in range(maxPos):
@@ -72,13 +73,14 @@ def searchDrops(boardMaster, piece):
             score = heuristic.analyze(simulBoard)
 
             if score > best[0]:
-                best = [score, rotation, pos]          
+                best = [score, rotation, pos]
 
             simulBoard = boardSnapshot #revert instance
 
     return best
 
 
+#Setup - wait for first piece to appear
 while True:
     pieceInfo = detect.pieceState()
     if pieceInfo[0] is not None:
@@ -89,9 +91,11 @@ while True:
 
 
 while True:
+    time.sleep(0.03) #good delay
     if keyboard.is_pressed('q'):
         break
     
+    #!GRAB STATE!#
     boardMaster = detect.boardState()
     pieceInfo = detect.pieceState()
     current, next = pieces[pieceInfo[0]], pieces[pieceInfo[1]]
@@ -109,6 +113,6 @@ while True:
             move.place(best_hold[1], best_hold[2], getKey(held))
             held = current #current piece goes to hold
 
-        time.sleep(0.03)
+        
 
 visuals.draw(boardMaster)

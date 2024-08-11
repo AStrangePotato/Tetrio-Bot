@@ -31,7 +31,7 @@ def pieceFromRGB(image, coord, dictLookUp):
     try:
         rgb = tuple(image[coord[1]][coord[0]])
         return getKey(rgb, dictLookUp)
-    except:
+    except: #dxcam null
         return None
 
 def pieceState():
@@ -60,5 +60,6 @@ def boardState():
                 board[y][x] = tile
             else:
                 board[y][x] = '?'
+                
     return board
 
