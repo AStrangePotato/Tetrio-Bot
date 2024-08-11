@@ -62,23 +62,18 @@ def place(dir, pos, piece):
     #!MOVEMENT!#
     #pieces leftmost edge will always be at index 3, except o piece at 4, z piece has empty corner there
     movement = -(3 - pos + rotationModifier)
-
-    #if movement is negative then move left
-    if movement < 0:
-        for i in range(abs(movement)):
+    for i in range(abs(movement)):
+        if movement < 0:
             keyboard.press_and_release('left')
-
-    #if movement is positive then move right
-    else:
-        for i in range(abs(movement)):
+        else:
             keyboard.press_and_release('right')
 
 
 
     #!DROP!#
-    time.sleep(0.001)
+    time.sleep(0.03)
     keyboard.press_and_release('space')
 
 def hold():
-    time.sleep(0.03)
+    time.sleep(0.01)
     keyboard.press_and_release('c')

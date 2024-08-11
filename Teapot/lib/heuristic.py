@@ -63,7 +63,7 @@ def bumpiness(board, columns, colHeights):
 
 def blockade(columns):
     blockade = 0
-    holeSpots = []
+    holeSpots = [0] * 10
 
     for i in range(10):
         for j in range(19, -1, -1):
@@ -105,7 +105,7 @@ def tetrisSlot(board, well):
     return 0
 
 
-def iDependency(board, columns, colHeights):
+def iDependency(colHeights):
     iDep = 0
 
     for i in range(1, 8):
@@ -152,6 +152,6 @@ def analyze(board):
     varD = bumpiness(board, columns, colHeights)
     varE = blockade(columns)
     varF = tetrisSlot(board, columns[0])
-    varG = iDependency(board, columns[1:], colHeights)
+    varG = iDependency(colHeights)
 
     return a*varA + b*varB + c*varC + d*varD + e*varE + f*varF + g*varG

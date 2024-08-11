@@ -1,13 +1,9 @@
-import numpy as np
 from lib import detect, heuristic, move, visuals
-import copy
-
-import time
-import keyboard
-import random
-
 from lib.constants import pieces
 
+import copy
+import time
+import keyboard
 
 
 def getKey(pieceArr):
@@ -95,17 +91,16 @@ while True:
 while True:
     if keyboard.is_pressed('q'):
         break
-
+    
     boardMaster = detect.boardState()
     pieceInfo = detect.pieceState()
     current, next = pieces[pieceInfo[0]], pieces[pieceInfo[1]]
-    
 
     #!SIMULATE DROPS!#
     if current is not None:
         best_current = searchDrops(boardMaster, current)
         best_hold = searchDrops(boardMaster, held)
-        
+
         #After simulation
         if best_current[0] >= best_hold[0]:
             move.place(best_current[1], best_current[2], getKey(current))
