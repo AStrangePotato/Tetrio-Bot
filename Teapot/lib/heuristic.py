@@ -1,4 +1,3 @@
-import visuals
 def aggregate(board, columns):
     aggregateHeight = 0
     aHM = 1.234

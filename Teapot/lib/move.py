@@ -67,10 +67,12 @@ def place(dir, pos, piece):
     if movement < 0:
         for i in range(abs(movement)):
             keyboard.press_and_release('left')
+
     #if movement is positive then move right
     else:
         for i in range(abs(movement)):
             keyboard.press_and_release('right')
+
 
 
     #!DROP!#
@@ -78,5 +80,5 @@ def place(dir, pos, piece):
     keyboard.press_and_release('space')
 
 def hold():
-    time.sleep(0.003)
+    time.sleep(0.03)
     keyboard.press_and_release('c')
