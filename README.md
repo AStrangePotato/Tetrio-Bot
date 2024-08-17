@@ -6,6 +6,7 @@ Download the included skin (skin.png) and apply using Tetr.io Plus at https://gi
 If the bot is seemingly placing pieces at random, try increasing the delay in the loop. This happens because your computer may be calculating the best move faster than Python can send the input to the game.
 
 Video demo:
+
 [![video demo](http://img.youtube.com/vi/Bm9AEgAsgc8/0.jpg)](https://www.youtube.com/watch?v=Bm9AEgAsgc8 "Video Title")
 
 Config settings:
