@@ -1,18 +1,19 @@
 import dxcam
 from . constants import pieceRGB, nextPieceRGB, boardRGB
 
-#!2560x1440!#
-# currentRegion = (1240, 75, 16, 16) #left, top, width, height maybe
-# nextRegion = (1625, 122, 312, 235)
-# boardRegion = (981, 122, 599, 1196)
-#!1920x1080!#
-#currentRegion = (930, 56, 16, 16)
-#nextRegion = (1219, 92, 312, 235)
 
-#!2560x1440!#
-currentRegion = (1240, 75, 1256, 91) #region = (left, top, right, bottom)
-nextRegion = (1625, 122, 1937, 357)
-boardRegion = (981, 122, 1580, 1318)
+if False:
+    #!1920x1080!#
+    currentRegion = (930, 56, 946, 72)
+    nextRegion = (1185, 95, 1417, 272)
+    boardRegion = (737, 94, 1183, 989)
+
+else:
+    #!2560x1440!#
+    currentRegion = (1240, 75, 1256, 91) #region = (left, top, right, bottom)
+    nextRegion = (1625, 122, 1937, 357)
+    boardRegion = (980, 122, 1580, 1318)
+
 
 camera = dxcam.create()
 
@@ -53,9 +54,11 @@ def boardState():
     board = [[0,0,0,0,0,0,0,0,0,0] for i in range(20)]
     boardSS = camera.grab(region=boardRegion)
 
+    tileSize = (boardRegion[2]-boardRegion[0]) // 10
+
     for y in range(20):
         for x in range(10):
-            tile = pieceFromRGB(boardSS, (x*60+30, y*60+30), boardRGB)
+            tile = pieceFromRGB(boardSS, (x*tileSize + tileSize//2, y*tileSize + tileSize//2), boardRGB)
             if tile is not None:
                 board[y][x] = tile
             else:

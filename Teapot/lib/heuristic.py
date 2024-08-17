@@ -12,7 +12,6 @@ def aggregate(board, columns):
 
     return aggregateHeight
 
-
 def clearedLines(board):
     clearedLines = 0
     for line in board: #cleared line until detects empty tile
@@ -36,7 +35,6 @@ def clearedLines(board):
             
     return clearedLines
 
-
 def holes(board, columns):
     holes = 0
     for i in range(10):
@@ -49,7 +47,6 @@ def holes(board, columns):
 
     return holes
 
-
 def bumpiness(board, columns, colHeights):
     bumpiness = 0
 
@@ -59,7 +56,6 @@ def bumpiness(board, columns, colHeights):
         prevH = colHeights[h]
         
     return bumpiness
-
 
 def blockade(columns):
     blockade = 0
@@ -77,7 +73,6 @@ def blockade(columns):
                 blockade += 1
                 
     return blockade
-
 
 def tetrisSlot(board, well):
     cleared = 0
@@ -104,7 +99,6 @@ def tetrisSlot(board, well):
 
     return 0
 
-
 def iDependency(colHeights):
     iDep = 0
 
@@ -124,10 +118,10 @@ def iDependency(colHeights):
 def analyze(board):
     a = -0.530213 #aggregate
     b =  0.760667 #increase tetris score after mvp
-    c = -0.694587 #hole
+    c = -10.4 #hole (replaced by blockade)
     d = -0.420690 #bumpiness
-    e = -0.174278 #blockade
-    f = -4.042069 #tetris well
+    e = -30.474278 #blockade
+    f = -2.042069 #tetris well
     g = -0.420420 #i piece dependencies
 
     colHeights = []

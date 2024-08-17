@@ -15,3 +15,5 @@ In Tetr.io+, it is also recommended to replace
 `particle_star`
 
 with transparent files (empty.png) to avoid the bot reading particle effects as unknown blocks.
+
+Discord: `astrangepotato`

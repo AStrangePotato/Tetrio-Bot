@@ -1,9 +1,11 @@
-from lib import detect, heuristic, move, visuals
-from lib.constants import pieces
-
 import copy
 import time
 import keyboard
+
+from lib import detect, heuristic, move, visuals
+from lib.constants import pieces
+
+
 
 
 def getKey(pieceArr):
@@ -26,6 +28,7 @@ def lowestBlocks(piece):
             
     return lowestBlocks
 
+#Simulates dropping a piece and returns the new board.
 def drop(piece, pos, board):
     #if board[0][pos] != 0 or board[0][pos] is not None:
         #return "Invalid drop location. Spot filled."
@@ -62,8 +65,10 @@ def drop(piece, pos, board):
         altitude += 1
     return board
 
+
+#Returns [score, rotation, position]
 def searchDrops(boardMaster, piece):
-    best = [-float("inf"), -1, -1] #score, rotation, position
+    best = [-float("inf"), -1, -1] 
 
     for rotation in range(len(piece)):
         maxPos = 11 - len(piece[rotation][0])
@@ -91,7 +96,7 @@ while True:
 
 
 while True:
-    time.sleep(0.03) #good delay
+    time.sleep(0.03) #good delay (too fast for public lobbies - will get kicked)
     if keyboard.is_pressed('q'):
         break
     
