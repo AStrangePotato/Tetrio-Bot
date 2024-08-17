@@ -1,6 +1,7 @@
 # **Teapot - Tetris Bot for Tetr.io**  
 
-![Add a heading](https://github.com/user-attachments/assets/4f3e2201-7483-4661-b5a4-2afffa4bc00d)
+![Banner](https://github.com/user-attachments/assets/aea6983b-b7f5-4009-afed-5b7914a0e7a3)
+
 ---
 
 ## ⚡ **Features**
