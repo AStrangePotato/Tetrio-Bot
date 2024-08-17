@@ -3,14 +3,12 @@
 ![Add a heading](https://github.com/user-attachments/assets/4f3e2201-7483-4661-b5a4-2afffa4bc00d)
 ---
 
-## 🚀 **Overview**
-Teapot is an advanced pixel bot that is blazingly fast, searching for best moves with heuristic evaluation.
-
 ## ⚡ **Features**
-- **Customizable Heuristics**: Adjust the bot's behavior with simple edits in `heuristics.py`.
+- **Blazingly Fast**: Searches for best moves with heuristic evaluation.
+- **Customizable Playstyle**: Adjust the bot's behavior with simple edits in `heuristics.py`.
 - **Resolution Support**: Currently supports 1920x1080 and 2560x1440 resolutions.
 - **Easy Integration**: Apply the custom skin (`skin.png`) via [Tetr.io Plus](https://gitlab.com/UniQMG/tetrio-plus).
-- **Particle Effect Optimization**: Replace particle effects to ensure smooth bot operation.
+
 
 ## 🎥 **Video Demo**
 
