@@ -1,4 +1,4 @@
-# **Teapot - Tetris Bot for Tetr.io**  
+# **Teapot - Tetris Bot for Tetrio**  
 
 ![Banner](https://github.com/user-attachments/assets/aea6983b-b7f5-4009-afed-5b7914a0e7a3)
 
