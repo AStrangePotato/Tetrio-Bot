@@ -9,7 +9,8 @@ lookup = {
     'left': 0x25,  # VK_LEFT
     'right': 0x27,  # VK_RIGHT
     'space': 0x20,  # VK_SPACE
-    'c': 0x43   # VK_C
+    'c': 0x43,  # VK_C
+    'r': 0x52   # VK_R
 }
 
 def press_and_release(key):
@@ -93,3 +94,9 @@ def place(dir, pos, piece):
 def hold():
     time.sleep(0.003)
     press_and_release('c')
+
+
+def retry():
+    ctypes.windll.user32.keybd_event(lookup['r'], 0, 0, 0)
+    time.sleep(1)
+    ctypes.windll.user32.keybd_event(lookup['r'], 0, 2, 0)

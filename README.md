@@ -30,6 +30,7 @@
 
 5. **Configure Tetr.io Settings**  
    - Set the following gameplay configurations:
+     - **Graphics**: Low
      - **Board Zoom**: 130%
      - **Shadow Visibility**: 0%
      - **Board Bounciness**: 0%

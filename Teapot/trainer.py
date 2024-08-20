@@ -1,19 +1,16 @@
 import random
 import math
-from PIL import Image
-import numpy as np
 import time
 import main
-from lib import detect
+from lib import detect, move
 
 weights = [
-    -0.530213,   # aggregate
-     0.760667,   # increase tetris score after mvp
-    -10.4,       # hole (replaced by blockade)
-    -0.420690,   # bumpiness
-    -30.474278,  # blockade
-    -2.042069,   # tetris well
-    -0.420420    # i piece dependencies
+    -0.5000,   # aggregate
+     1.0000,   # cleared
+    -0.5000,   # bumpiness
+    -3.0000,   # blockade
+    -1.0000,   # other pieces in tetris well
+    -0.5000    # i piece dependencies
 ]
 
 
@@ -57,4 +54,9 @@ def train_step(population):
     return next_generation
 
 def evaluate(weights):
-    main.main(weights)
+    time.sleep(0.3)
+    move.retry()
+    main.play(duration=10, weights=weights)
+    print(detect.get_VS())
+
+evaluate(weights)

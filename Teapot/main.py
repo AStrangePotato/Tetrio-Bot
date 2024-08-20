@@ -5,14 +5,13 @@ import keyboard
 from lib import detect, heuristic, move, visuals
 from lib.constants import pieces
 
-
-
-
+#Gets key of a value in a dict.
 def getKey(pieceArr):
     for k, v in pieces.items():
         if pieceArr == v:
             return k
 
+#Returns the lowest tile in a tetromino.
 def lowestBlocks(piece):
     lowestBlocks = []
 
@@ -65,8 +64,7 @@ def drop(piece, pos, board):
         altitude += 1
     return board
 
-
-#Returns [score, rotation, position]
+#Returns [score, rotation, position].
 def searchDrops(boardMaster, piece, weights):
     best = [-float("inf"), -1, -1] 
 
@@ -85,7 +83,7 @@ def searchDrops(boardMaster, piece, weights):
     return best
 
 
-def main(weights=[-0.530213, 0.760667, -10.4, -0.420690, -30.474278, -2.042069, -0.420420]):
+def play(duration=float("inf"), weights=[-0.530213, 0.760667, -10.4, -0.420690, -30.474278, -2.042069, -0.420420]):
     #Setup - wait for first piece to appear
     while True:
         pieceInfo = detect.pieceState()
@@ -93,11 +91,12 @@ def main(weights=[-0.530213, 0.760667, -10.4, -0.420690, -30.474278, -2.042069, 
             move.hold()
             held = pieces[pieceInfo[0]]
             current = pieces[pieceInfo[1]]
+            startTime = time.time()
             break
 
 
-    while True:
-        time.sleep(0.03) #good delay (too fast for public lobbies - will get kicked)
+    while time.time() < startTime + duration:
+        time.sleep(0.02) #good delay (too fast for public lobbies - will get kicked)
         if keyboard.is_pressed('q'):
             break
         
@@ -123,5 +122,7 @@ def main(weights=[-0.530213, 0.760667, -10.4, -0.420690, -30.474278, -2.042069, 
 
     visuals.draw(boardMaster)
 
+
+
 if __name__ == "__main__":
-    main()
+    play()

@@ -1,16 +1,13 @@
-def aggregate(board, columns):
+def aggregate(board):
     aggregateHeight = 0
-    aHM = 1.234
     for i in range(10):
         for j in range(20):
-            if board[j][i] != 0: #find first non empty tile in the board and sum to aH
-                if j < 6: #downstacking threshold
-                    aggregateHeight += (20-j) * aHM - j/10 #reduce tie
-                else:
-                    aggregateHeight += 20 - j - j/10 #the lower it is the better to reduce tie
+            if board[j][i] != 0:
+                #find first non empty tile in the board and apply non-linear scaling
+                aggregateHeight += (20 - j) ** 1.5
                 break
 
-    return aggregateHeight
+    return aggregateHeight/10
 
 def clearedLines(board):
     clearedLines = 0
@@ -27,27 +24,15 @@ def clearedLines(board):
         case 4:
             clearedLines *= 10 #tetris gucci af
         case 3:
-            clearedLines *= 0.8 #triple are meh
+            clearedLines *= 0.75 #triple are horrible value
         case 2:
-            clearedLines += 1.5 #doubles are value
+            clearedLines *= 1.5 #doubles are ok
         case 1:
             clearedLines *= 1 #singles are ok cause im fast
             
     return clearedLines
 
-def holes(board, columns):
-    holes = 0
-    for i in range(10):
-        col = columns[i]
-        for tile in range(len(col)):
-            if tile < 19:
-                #if current tile is not empty and tile below is empty
-                if col[tile+1] == 0 and col[tile] != 0: 
-                    holes += 1
-
-    return holes
-
-def bumpiness(board, columns, colHeights):
+def bumpiness(colHeights):
     bumpiness = 0
 
     prevH = colHeights[0]
@@ -59,19 +44,16 @@ def bumpiness(board, columns, colHeights):
 
 def blockade(columns):
     blockade = 0
-    holeSpots = [0] * 10
 
     for i in range(10):
+        isEmpty = False
         for j in range(19, -1, -1):
             if columns[i][j] == 0:
-                holeSpots.append(j)
-                break
-
-    for col in range(10):
-        for tile in range(20):
-            if columns[col][tile] != 0 and tile < holeSpots[col]:
+                isEmpty = True
+            
+            if isEmpty and columns[i][j] != 0: #this tile is blocking a empty space
                 blockade += 1
-                
+   
     return blockade
 
 def tetrisSlot(board, well):
@@ -116,8 +98,7 @@ def iDependency(colHeights):
 
 
 def analyze(board, weights):
-    a, b, c, d, e, f, g = weights
-
+    a, b, c, d, e, f = weights
 
     colHeights = []
     for i in range(10):
@@ -135,12 +116,12 @@ def analyze(board, weights):
     for i in range(10):
         columns.append([row[i] for row in board])
 
-    varA = aggregate(board, columns)
+    varA = aggregate(board)
     varB = clearedLines(board) 
-    varC = holes(board, columns)
-    varD = bumpiness(board, columns, colHeights)
-    varE = blockade(columns)
-    varF = tetrisSlot(board, columns[0])
-    varG = iDependency(colHeights)
+    varC = bumpiness(colHeights)
+    varD = blockade(columns)
+    varE = tetrisSlot(board, columns[0])
+    varF = iDependency(colHeights)
 
-    return a*varA + b*varB + c*varC + d*varD + e*varE + f*varF + g*varG
+    print(varA, varB, varC, varD, varE, varF)
+    return a*varA + b*varB + c*varC + d*varD + e*varE + f*varF

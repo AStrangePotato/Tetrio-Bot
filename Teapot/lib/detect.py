@@ -50,7 +50,7 @@ def boardState():
 
     for y in range(20):
         for x in range(10):
-            tile = pieceFromRGB(boardSS, (x*tileSize + tileSize//3, y*tileSize + tileSize//3), boardRGB)
+            tile = pieceFromRGB(boardSS, (x*tileSize + tileSize//8, y*tileSize + tileSize//8), boardRGB)
             if tile is not None:
                 board[y][x] = tile
             else:
@@ -60,6 +60,7 @@ def boardState():
 
 def get_digits(image):
     image = Image.fromarray(image)
+    image.save("score.png")
     text = pytesseract.image_to_string(image, config='outputbase digits --psm 6').rstrip()
 
     if text[-3] != ".":
@@ -67,8 +68,7 @@ def get_digits(image):
     
     return text
 
-def get():
-    grab = camera.grab(region=(1590, 1140, 1590+285, 1140+80))
+def get_VS():
+    grab = camera.grab(region=(1585, 1130, 1585+300, 1130+100))
     num = get_digits(grab)
-
-    print(num)
+    return num
