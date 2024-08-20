@@ -24,7 +24,7 @@
    `pip install keyboard dxcam`
    
 4. **Adjust Resolution**  
-   - Modify the flag in `detect.py` to match your screen resolution. Supported resolutions are:
+   - Modify the flag in `constants.py` to match your screen resolution. Supported resolutions are:
      - 1920x1080
      - 2560x1440
 

@@ -1,21 +1,13 @@
 import dxcam
+from PIL import Image
+import pytesseract
+
 from . constants import pieceRGB, nextPieceRGB, boardRGB
-
-
-if False:
-    #!1920x1080!#
-    currentRegion = (930, 56, 946, 72)
-    nextRegion = (1185, 95, 1417, 272)
-    boardRegion = (737, 94, 1183, 989)
-
-else:
-    #!2560x1440!#
-    currentRegion = (1240, 75, 1256, 91) #region = (left, top, right, bottom)
-    nextRegion = (1625, 122, 1937, 357)
-    boardRegion = (980, 122, 1580, 1318)
-
+from . constants import currentRegion, nextRegion, boardRegion
 
 camera = dxcam.create()
+pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+
 
 def getKey(val, dictionary):
     for k, v in dictionary.items():
@@ -66,3 +58,17 @@ def boardState():
                 
     return board
 
+def get_digits(image):
+    image = Image.fromarray(image)
+    text = pytesseract.image_to_string(image, config='outputbase digits --psm 6').rstrip()
+
+    if text[-3] != ".":
+        text = text[:-2] + "." + text[-2:]
+    
+    return text
+
+def get():
+    grab = camera.grab(region=(1590, 1140, 1590+285, 1140+80))
+    num = get_digits(grab)
+
+    print(num)

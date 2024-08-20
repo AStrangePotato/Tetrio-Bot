@@ -1,3 +1,16 @@
+if False:
+    #!1920x1080!#
+    currentRegion = (930, 56, 946, 72)
+    nextRegion = (1185, 95, 1417, 272)
+    boardRegion = (737, 94, 1183, 989)
+
+else:
+    #!2560x1440!#
+    currentRegion = (1240, 75, 1256, 91) #region = (left, top, right, bottom)
+    nextRegion = (1625, 122, 1937, 357)
+    boardRegion = (980, 122, 1580, 1318)
+
+
 #6350k, 80% dimmer, current piece
 pieceRGB = {
                 "s":(86,234,80),  #green

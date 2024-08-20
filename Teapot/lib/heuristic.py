@@ -1,3 +1,6 @@
+from . import trainer
+
+
 def aggregate(board, columns):
     aggregateHeight = 0
     aHM = 1.234
@@ -116,13 +119,8 @@ def iDependency(colHeights):
 
 
 def analyze(board):
-    a = -0.530213 #aggregate
-    b =  0.760667 #increase tetris score after mvp
-    c = -10.4 #hole (replaced by blockade)
-    d = -0.420690 #bumpiness
-    e = -30.474278 #blockade
-    f = -2.042069 #tetris well
-    g = -0.420420 #i piece dependencies
+    a, b, c, d, e, f, g = trainer.weights
+
 
     colHeights = []
     for i in range(10):
