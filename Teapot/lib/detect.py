@@ -50,7 +50,7 @@ def boardState():
 
     for y in range(20):
         for x in range(10):
-            tile = pieceFromRGB(boardSS, (x*tileSize + tileSize//8, y*tileSize + tileSize//8), boardRGB)
+            tile = pieceFromRGB(boardSS, (x*tileSize + tileSize//4, y*tileSize + tileSize//4), boardRGB)
             if tile is not None:
                 board[y][x] = tile
             else:
@@ -59,14 +59,18 @@ def boardState():
     return board
 
 def get_digits(image):
-    image = Image.fromarray(image)
-    image.save("score.png")
-    text = pytesseract.image_to_string(image, config='outputbase digits --psm 6').rstrip()
-
-    if text[-3] != ".":
-        text = text[:-2] + "." + text[-2:]
+    try:
+        image = Image.fromarray(image)
+        image.save("score.png")
+        text = pytesseract.image_to_string(image, config='outputbase digits --psm 6').rstrip()
     
-    return text
+        if text[-3] != ".":
+            text = text[:-2] + "." + text[-2:]
+        
+        return float(text)
+    
+    except:
+        return -1
 
 def get_VS():
     grab = camera.grab(region=(1585, 1130, 1585+300, 1130+100))

@@ -54,32 +54,16 @@ def blockade(columns):
             if isEmpty and columns[i][j] != 0: #this tile is blocking a empty space
                 blockade += 1
    
-    return blockade
+    return blockade ** 0.75 #non-linear scaling
 
 def tetrisSlot(board, well):
-    cleared = 0
-    nonClearI = 0
+    blocking = 0
     for i in range(20):
-        clr = True
-        for j in range(10):
-            if board[i][j] == 0:
-                clr = False
-                break
-        if clr:
-            cleared += 1
-                
-    for tile in well:
-        if tile != 'i' and tile != 0:
-            return 1
-        if tile == 'i':
-            nonClearI += 1
+        lineCleared = 0 not in board[i]
+        if (well[i] != "i" and well[i] != 0) or well[i] == "i" and not lineCleared:
+            blocking += 1
 
-    if nonClearI > cleared:
-        return 0.4
-    if nonClearI >= cleared:
-        return 0.2
-
-    return 0
+    return blocking
 
 def iDependency(colHeights):
     iDep = 0
@@ -123,5 +107,4 @@ def analyze(board, weights):
     varE = tetrisSlot(board, columns[0])
     varF = iDependency(colHeights)
 
-    print(varA, varB, varC, varD, varE, varF)
     return a*varA + b*varB + c*varC + d*varD + e*varE + f*varF

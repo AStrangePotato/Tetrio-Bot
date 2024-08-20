@@ -67,7 +67,9 @@ def drop(piece, pos, board):
 #Returns [score, rotation, position].
 def searchDrops(boardMaster, piece, weights):
     best = [-float("inf"), -1, -1] 
-
+    if piece is None:
+        return best
+    
     for rotation in range(len(piece)):
         maxPos = 11 - len(piece[rotation][0])
         for pos in range(maxPos):
@@ -82,6 +84,12 @@ def searchDrops(boardMaster, piece, weights):
 
     return best
 
+#Boolean if the top rows of a board are filled.
+def gameOver(board):
+    for tile in "jlszoti":
+        if tile in board[3]:
+            return True
+    return False
 
 def play(duration=float("inf"), weights=[-0.530213, 0.760667, -10.4, -0.420690, -30.474278, -2.042069, -0.420420]):
     #Setup - wait for first piece to appear
@@ -96,7 +104,7 @@ def play(duration=float("inf"), weights=[-0.530213, 0.760667, -10.4, -0.420690, 
 
 
     while time.time() < startTime + duration:
-        time.sleep(0.02) #good delay (too fast for public lobbies - will get kicked)
+        time.sleep(0.025)
         if keyboard.is_pressed('q'):
             break
         
@@ -105,6 +113,11 @@ def play(duration=float("inf"), weights=[-0.530213, 0.760667, -10.4, -0.420690, 
         pieceInfo = detect.pieceState()
         current, next = pieces[pieceInfo[0]], pieces[pieceInfo[1]]
 
+        #!TERMINATE ROLLOUT!#
+        if gameOver(boardMaster):
+            visuals.draw(boardMaster)
+            break
+        
         #!SIMULATE DROPS!#
         if current is not None:
             best_current = searchDrops(boardMaster, current, weights)
@@ -121,6 +134,7 @@ def play(duration=float("inf"), weights=[-0.530213, 0.760667, -10.4, -0.420690, 
             
 
     visuals.draw(boardMaster)
+    print(boardMaster)
 
 
 

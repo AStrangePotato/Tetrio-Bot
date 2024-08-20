@@ -3,6 +3,7 @@ import math
 import time
 import main
 from lib import detect, move
+import client
 
 weights = [
     -0.5000,   # aggregate
@@ -14,8 +15,10 @@ weights = [
 ]
 
 
-mutation_rate = 0.1
-population_size = 15
+mutation_rate = 0.2 # %
+learning_rate = 0.1 # %
+rollout_duration = 7 #seconds
+population_size = 10 #agents
 
 def mergeWeights(A, B):
     n = len(A)
@@ -23,18 +26,16 @@ def mergeWeights(A, B):
     for i in range(n):
         new[i] = (A[i] + B[i]) / 2
         if random.uniform(0, 1) < mutation_rate:
-            new[i] += random.uniform(-1, 1)
+            new[i] += random.uniform(-1, 1) * learning_rate
     
     return new
 
 def evolve(population):
-    new_population = []
-    for i in range(3):
-        new_population.append(population[i])
-    
-    for i in range(population_size-3):
-        parentA = math.floor(random.triangular(0, population_size-1, 5))
-        parentB = math.floor(random.triangular(0, population_size-1, 5))
+    new_population = [population[0]]
+
+    for i in range(population_size-1):
+        parentA = math.floor(random.triangular(0, population_size-1, 3))
+        parentB = math.floor(random.triangular(0, population_size-1, 3))
 
         child = mergeWeights(population[parentA], population[parentB])
         new_population.append(child)
@@ -48,15 +49,28 @@ def train_step(population):
         fitness = evaluate(agent)
         outcomes.append((fitness, agent))
     
-    outcomes.sort()
-    next_generation = evolve(x[1] for x in outcomes)
+    outcomes.sort(reverse=True)
 
-    return next_generation
+    next_generation = evolve([x[1] for x in outcomes])
+
+    return next_generation, outcomes[0]
+
 
 def evaluate(weights):
-    time.sleep(0.3)
+    time.sleep(0.25)
     move.retry()
-    main.play(duration=10, weights=weights)
-    print(detect.get_VS())
+    main.play(duration=rollout_duration, weights=weights)
+    return detect.get_VS()
 
-evaluate(weights)
+def train(weights, epochs=50):
+    population = evolve([weights for i in range(population_size)]) #initial pop
+
+    for i in range(epochs):
+        new_population, king = train_step(population)
+        population = new_population
+        client.send_message(i+1, king[0], king[1])
+
+    return population
+
+
+print(train([-0.6040088729980074, 1.2977144824191589, -0.5363367336570115, -2.8855510684311336, -0.9059300856666658, -0.2442835269184844]))
