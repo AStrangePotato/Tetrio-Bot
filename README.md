@@ -48,7 +48,3 @@
 ## 🛠 **Customization**
 The bot's behavior is controlled by the values in `heuristics.py`. These values are placeholders but generally stable for testing. If you discover stronger values or optimizations, your contributions are welcome!
 
-
-## 💬 **Contact & Contributions**
-Found a bug? Have suggestions? Want to contribute?  
-Reach out via Discord: **`astrangepotato`**
