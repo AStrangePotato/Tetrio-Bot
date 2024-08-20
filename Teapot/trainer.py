@@ -3,8 +3,8 @@ import math
 from PIL import Image
 import numpy as np
 import time
-
-from . import detect
+import main
+from lib import detect
 
 weights = [
     -0.530213,   # aggregate
@@ -56,3 +56,5 @@ def train_step(population):
 
     return next_generation
 
+def evaluate(weights):
+    main.main(weights)

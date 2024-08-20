@@ -50,7 +50,7 @@ def boardState():
 
     for y in range(20):
         for x in range(10):
-            tile = pieceFromRGB(boardSS, (x*tileSize + tileSize//2, y*tileSize + tileSize//2), boardRGB)
+            tile = pieceFromRGB(boardSS, (x*tileSize + tileSize//3, y*tileSize + tileSize//3), boardRGB)
             if tile is not None:
                 board[y][x] = tile
             else:

@@ -1,6 +1,3 @@
-from . import trainer
-
-
 def aggregate(board, columns):
     aggregateHeight = 0
     aHM = 1.234
@@ -118,8 +115,8 @@ def iDependency(colHeights):
     return iDep
 
 
-def analyze(board):
-    a, b, c, d, e, f, g = trainer.weights
+def analyze(board, weights):
+    a, b, c, d, e, f, g = weights
 
 
     colHeights = []
