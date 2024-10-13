@@ -3,7 +3,7 @@ import time
 import keyboard
 
 from lib import detect, heuristic, move, visuals
-from lib.constants import pieces
+from lib.constants import pieces, weights
 
 #Gets key of a value in a dict.
 def getKey(pieceArr):
@@ -91,7 +91,7 @@ def gameOver(board):
             return True
     return False
 
-def play(duration=float("inf"), weights=[-0.530213, 0.760667, -10.4, -0.420690, -30.474278, -2.042069, -0.420420]):
+def play(duration=float("inf"), weights=weights):
     #Setup - wait for first piece to appear
     while True:
         pieceInfo = detect.pieceState()
@@ -104,7 +104,7 @@ def play(duration=float("inf"), weights=[-0.530213, 0.760667, -10.4, -0.420690, 
 
 
     while time.time() < startTime + duration:
-        time.sleep(0.025)
+        time.sleep(0.25)
         if keyboard.is_pressed('q'):
             break
         
@@ -134,8 +134,6 @@ def play(duration=float("inf"), weights=[-0.530213, 0.760667, -10.4, -0.420690, 
             
 
     visuals.draw(boardMaster)
-    print(boardMaster)
-
 
 
 if __name__ == "__main__":

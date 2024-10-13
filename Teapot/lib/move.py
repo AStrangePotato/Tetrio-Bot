@@ -1,6 +1,7 @@
 import time
 import ctypes
-
+import random
+from . constants import MOVE_DELAY
 
 lookup = {
     'a': 0x41,  # VK_A
@@ -80,6 +81,7 @@ def place(dir, pos, piece):
     #pieces leftmost edge will always be at index 3, except o piece at 4, z piece has empty corner there
     movement = -(3 - pos + rotationModifier)
     for i in range(abs(movement)):
+        time.sleep(MOVE_DELAY + random.uniform(-0.01, 0.01))
         if movement < 0:
             press_and_release('left')
         else:
@@ -88,11 +90,11 @@ def place(dir, pos, piece):
 
 
     #!DROP!#
-    time.sleep(0.003)
     press_and_release('space')
+    time.sleep(MOVE_DELAY)
 
 def hold():
-    time.sleep(0.003)
+    time.sleep(MOVE_DELAY)
     press_and_release('c')
 
 

@@ -10,6 +10,17 @@ else:
     nextRegion = (1625, 122, 1937, 357)
     boardRegion = (980, 122, 1580, 1318)
 
+MOVE_DELAY = 0.01
+
+weights = [
+    -1.530213,   # aggregate
+     0.760667,   # increase tetris score after mvp
+    -0.420690,   # bumpiness
+    -5.474278,  # blockade
+    -2.042069,   # tetris well
+    -0.420420    # i piece dependencies
+]
+
 
 #6350k, 80% dimmer, current piece
 pieceRGB = {

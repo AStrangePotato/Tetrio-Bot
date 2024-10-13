@@ -35,8 +35,8 @@ def clearedLines(board):
 def bumpiness(colHeights):
     bumpiness = 0
 
-    prevH = colHeights[0]
-    for h in range(1, len(colHeights)): #get difference between adjacent columns
+    prevH = colHeights[1]
+    for h in range(2, len(colHeights)): #get difference between adjacent columns
         bumpiness += abs(prevH - colHeights[h])
         prevH = colHeights[h]
         
