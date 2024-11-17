@@ -12,7 +12,7 @@
 
 
 ## 🚀 **Video Demo**
-[![Watch the demo](http://img.youtube.com/vi/Bm9AEgAsgc8/0.jpg)](https://www.youtube.com/watch?v=Bm9AEgAsgc8 "Teapot Bot Demo")
+[![Watch the demo](http://img.youtube.com/vi/veCgZAZEtwA/0.jpg)](https://www.youtube.com/watch?v=veCgZAZEtwA "Teapot Bot Demo")
 
 
 ## 📦 **Quickstart Guide**
