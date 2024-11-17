@@ -131,8 +131,6 @@ def play(duration=float("inf"), weights=weights):
                 move.place(best_hold[1], best_hold[2], getKey(held))
                 held = current #current piece goes to hold
 
-            
-
     visuals.draw(boardMaster)
 
 

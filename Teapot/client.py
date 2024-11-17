@@ -9,10 +9,11 @@ def send_message(epoch, best, bestw):
         # Connect to the server
         client_socket.connect((server_host, server_port))
 
-        # Send the epoch value
+        # Send the epoch valuea
         message = f"Epoch: {epoch} Best: {best} Weights: {bestw}"
         client_socket.sendall(message.encode('utf-8'))
         print(f"Sent: {message}")
+
 
     except Exception as e:
         print(f"Error: {e}")
