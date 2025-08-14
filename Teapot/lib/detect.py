@@ -1,12 +1,12 @@
 import dxcam
 from PIL import Image
-import pytesseract
+#import pytesseract
 
 from . constants import pieceRGB, nextPieceRGB, boardRGB
 from . constants import currentRegion, nextRegion, boardRegion
 
 camera = dxcam.create()
-pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+#pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 
 def getKey(val, dictionary):
@@ -58,21 +58,21 @@ def boardState():
                 
     return board
 
-def get_digits(image):
-    try:
-        image = Image.fromarray(image)
-        image.save("score.png")
-        text = pytesseract.image_to_string(image, config='outputbase digits --psm 6').rstrip()
+# def get_digits(image):
+#     try:
+#         image = Image.fromarray(image)
+#         image.save("score.png")
+#         text = pytesseract.image_to_string(image, config='outputbase digits --psm 6').rstrip()
     
-        if text[-3] != ".":
-            text = text[:-2] + "." + text[-2:]
+#         if text[-3] != ".":
+#             text = text[:-2] + "." + text[-2:]
         
-        return float(text)
+#         return float(text)
     
-    except:
-        return -1
+#     except:
+#         return -1
 
-def get_VS():
-    grab = camera.grab(region=(1585, 1130, 1585+300, 1130+100))
-    num = get_digits(grab)
-    return num
+# def get_VS():
+#     grab = camera.grab(region=(1585, 1130, 1585+300, 1130+100))
+#     num = get_digits(grab)
+#     return num

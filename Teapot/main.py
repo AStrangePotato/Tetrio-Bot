@@ -1,9 +1,10 @@
 import copy
 import time
 import keyboard
+import random
 
 from lib import detect, heuristic, move, visuals
-from lib.constants import pieces, weights
+from lib.constants import pieces, weights, PIECE_DELAY
 
 #Gets key of a value in a dict.
 def getKey(pieceArr):
@@ -87,7 +88,7 @@ def searchDrops(boardMaster, piece, weights):
 #Boolean if the top rows of a board are filled.
 def gameOver(board):
     for tile in "jlszoti":
-        if tile in board[3]:
+        if tile in board[2]:
             return True
     return False
 
@@ -104,7 +105,7 @@ def play(duration=float("inf"), weights=weights):
 
 
     while time.time() < startTime + duration:
-        time.sleep(0.25)
+        time.sleep(PIECE_DELAY + random.uniform(0, 0.1))
         if keyboard.is_pressed('q'):
             break
         
@@ -115,7 +116,6 @@ def play(duration=float("inf"), weights=weights):
 
         #!TERMINATE ROLLOUT!#
         if gameOver(boardMaster):
-            visuals.draw(boardMaster)
             break
         
         #!SIMULATE DROPS!#
@@ -131,8 +131,6 @@ def play(duration=float("inf"), weights=weights):
                 move.place(best_hold[1], best_hold[2], getKey(held))
                 held = current #current piece goes to hold
 
-    visuals.draw(boardMaster)
-
-
+    
 if __name__ == "__main__":
     play()

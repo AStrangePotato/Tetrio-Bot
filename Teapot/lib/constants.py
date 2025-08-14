@@ -10,16 +10,20 @@ else:
     nextRegion = (1625, 122, 1937, 357)
     boardRegion = (980, 122, 1580, 1318)
 
-MOVE_DELAY = 0.01
+MOVE_DELAY = 0.01 #delay between keypresses
+PIECE_DELAY = 0.15 #delay between pieces
+
 
 weights = [
     -1.530213,   # aggregate
      0.760667,   # increase tetris score after mvp
     -0.420690,   # bumpiness
     -5.474278,  # blockade
-    -2.042069,   # tetris well
+    -1.842069,   # tetris well
     -0.420420    # i piece dependencies
 ]
+
+weights = [-0.6040088729980074, 1.2977144824191589, -0.5363367336570115, -2.8855510684311336, -0.9059300856666658, -0.2442835269184844]
 
 
 #6350k, 80% dimmer, current piece
