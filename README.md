@@ -11,12 +11,10 @@
 - **Easy Setup**: Low-hassle setup with minimal dependencies and no need to build/compile files yourself.
 
 
-## 🚀 **Video Demo**
-[![Watch the demo](http://img.youtube.com/vi/Bm9AEgAsgc8/0.jpg)](https://www.youtube.com/watch?v=Bm9AEgAsgc8 "Teapot Bot Demo")
+## 🚀 **Video Demo + Setup Instructions**
+[![Watch the demo](http://img.youtube.com/vi/Bm9AEgAsgc8/0.jpg)](https://www.youtube.com/watch?v=7m_bH6ot5VI "Teapot Bot Demo")
 
 ## 📦 **Quickstart Guide**
-Video Instructions available here: https://www.youtube.com/watch?v=7m_bH6ot5VI
-
 1. **Download and Apply Skin**  
    - Download the included skin (`skin.png`) and apply it using [Tetr.io Plus](https://gitlab.com/UniQMG/tetrio-plus).
 
