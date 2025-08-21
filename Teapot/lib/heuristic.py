@@ -4,7 +4,7 @@ def aggregate(board):
         for j in range(20):
             if board[j][i] != 0:
                 #find first non empty tile in the board and apply non-linear scaling
-                aggregateHeight += (20 - j) ** 1.5
+                aggregateHeight += (20 - j) ** 3
                 break
 
     return aggregateHeight/10
@@ -46,15 +46,18 @@ def blockade(columns):
     blockade = 0
 
     for i in range(10):
-        isEmpty = False
+        firstEmpty = 0
         for j in range(19, -1, -1):
             if columns[i][j] == 0:
-                isEmpty = True
-            
-            if isEmpty and columns[i][j] != 0: #this tile is blocking a empty space
-                blockade += 1
-   
-    return blockade ** 0.75 #non-linear scaling
+                firstEmpty = j
+                break
+        
+        for j in range(20):
+            if columns[i][j] != 0:
+                blockade += firstEmpty - j
+                break
+
+    return blockade
 
 def tetrisSlot(board, well):
     blocking = 0
@@ -68,7 +71,7 @@ def tetrisSlot(board, well):
 def iDependency(colHeights):
     iDep = 0
 
-    for i in range(1, 8):
+    for i in range(2, 8):
         c, l, r = colHeights[i], colHeights[i-1], colHeights[i+1] #heights of current and adjacent columns
         if l - c >= 3 and r - c >= 3:
             iDep += 1

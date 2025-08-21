@@ -76,12 +76,13 @@ def place(dir, pos, piece):
     elif dir == 2:
         press_and_release('a')
 
+    time.sleep(0.001)
 
     #!MOVEMENT!#
     #pieces leftmost edge will always be at index 3, except o piece at 4, z piece has empty corner there
     movement = -(3 - pos + rotationModifier)
     for i in range(abs(movement)):
-        time.sleep(MOVE_DELAY + random.uniform(-0.01, 0.01))
+        time.sleep(random.uniform(0.001, MOVE_DELAY))
         if movement < 0:
             press_and_release('left')
         else:
@@ -91,7 +92,7 @@ def place(dir, pos, piece):
 
     #!DROP!#
     press_and_release('space')
-    time.sleep(MOVE_DELAY)
+    
 
 def hold():
     time.sleep(MOVE_DELAY)

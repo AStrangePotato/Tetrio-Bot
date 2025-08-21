@@ -21,11 +21,11 @@ def getKey(val, dictionary):
                     return k
 
 def pieceFromRGB(image, coord, dictLookUp):
-    try:
-        rgb = tuple(image[coord[1]][coord[0]])
-        return getKey(rgb, dictLookUp)
-    except: #dxcam null
+    if image is None: #dxcam null
         return None
+    rgb = tuple(image[coord[1]][coord[0]])
+    return getKey(rgb, dictLookUp)
+
 
 def pieceState():
     #From dxcam docs:
@@ -43,18 +43,22 @@ def pieceState():
 
 
 def boardState():
+    tileSize = (boardRegion[2]-boardRegion[0]) // 10
     board = [[0,0,0,0,0,0,0,0,0,0] for i in range(20)]
     boardSS = camera.grab(region=boardRegion)
 
-    tileSize = (boardRegion[2]-boardRegion[0]) // 10
 
-    for y in range(20):
-        for x in range(10):
-            tile = pieceFromRGB(boardSS, (x*tileSize + tileSize//4, y*tileSize + tileSize//4), boardRGB)
-            if tile is not None:
-                board[y][x] = tile
-            else:
-                board[y][x] = '?'
+    if boardSS is not None:
+        Image.fromarray(boardSS).save("boardSS.png")
+    
+
+        for y in range(20):
+            for x in range(10):
+                tile = pieceFromRGB(boardSS, (x*tileSize + tileSize//4, y*tileSize + tileSize//4), boardRGB)
+                if tile is not None:
+                    board[y][x] = tile
+                else:
+                    board[y][x] = 0
                 
     return board
 

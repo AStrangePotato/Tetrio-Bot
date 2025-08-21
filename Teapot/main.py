@@ -105,10 +105,9 @@ def play(duration=float("inf"), weights=weights):
 
 
     while time.time() < startTime + duration:
-        time.sleep(PIECE_DELAY + random.uniform(0, 0.1))
         if keyboard.is_pressed('q'):
             break
-        
+
         #!GRAB STATE!#
         boardMaster = detect.boardState()
         pieceInfo = detect.pieceState()
