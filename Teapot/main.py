@@ -30,9 +30,6 @@ def lowestBlocks(piece):
 
 #Simulates dropping a piece and returns the new board.
 def drop(piece, pos, board):
-    #if board[0][pos] != 0 or board[0][pos] is not None:
-        #return "Invalid drop location. Spot filled."
-    
     altitude = 1
     lowestTiles = lowestBlocks(piece)
     

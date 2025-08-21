@@ -1,19 +1,8 @@
 import random
 import math
-import time
-import main
-from lib import detect, move
-import client
-
-weights = [
-    -0.5000,   # aggregate
-     1.0000,   # cleared
-    -0.5000,   # bumpiness
-    -3.0000,   # blockade
-    -1.0000,   # other pieces in tetris well
-    -0.5000    # i piece dependencies
-]
-
+from game import TetrisGame
+from lib import heuristic
+import copy
 
 mutation_rate = 0.2 # %
 learning_rate = 0.1 # %
@@ -56,11 +45,30 @@ def train_step(population):
     return next_generation, outcomes[0]
 
 
+
 def evaluate(weights):
-    time.sleep(0.25)
-    move.retry()
-    main.play(duration=rollout_duration, weights=weights)
-    return detect.get_VS()
+    game = TetrisGame()
+
+    for move in range(100): #each bot gets 100 pieces
+        piece = game.next_piece()
+
+        best = [-float("inf"), -1, -1] 
+
+        for rotation in range(len(piece)):
+            maxPos = 11 - len(piece[rotation][0])
+            for pos in range(maxPos):
+                boardSnapshot = copy.deepcopy(boardMaster) #new instance
+                simulBoard = drop(piece[rotation], pos, boardSnapshot)
+                score = heuristic.analyze(simulBoard, weights)
+
+                if score > best[0]:
+                    best = [score, rotation, pos]
+
+                simulBoard = boardSnapshot #revert instance
+
+
+    return game.score #sent lines 
+
 
 def train(weights, epochs=50):
     population = evolve([weights for i in range(population_size)]) #initial pop
@@ -68,7 +76,6 @@ def train(weights, epochs=50):
     for i in range(epochs):
         new_population, king = train_step(population)
         population = new_population
-        client.send_message(i+1, king[0], king[1])
 
     return population
 
