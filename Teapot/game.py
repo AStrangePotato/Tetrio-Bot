@@ -9,6 +9,9 @@ class TetrisGame:
         self.queue = deque()
         self.score = 0
 
+    def set_board(self, newBoard):
+        self.board = newBoard
+
     def refill_bag(self):
         bag = list("jlsziot")
         random.shuffle(bag)
@@ -50,14 +53,10 @@ class TetrisGame:
             else:
                 break
         self.place_piece(piece, final_row, pos)
-        self.clear_lines()
-        
+
+    def isGameOver(self):
+        return self.board[0] != [0] * 10
+
     def draw(self):
         visuals.draw(self.board)
 
-
-game = TetrisGame()
-
-piece_type = game.next_piece()
-
-game.draw()

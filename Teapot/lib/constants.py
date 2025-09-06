@@ -18,10 +18,12 @@ weights = [
     -1.030,   # aggregate
      0.760,   # increase tetris score after mvp
     -0.420,   # bumpiness
-    -18.474,  # blockade
+    -6.474,  # blockade
     -1.942,   # tetris well
     -2.420    # i piece dependencies
 ]
+
+weights = [-0.8452081857581533, -2.166070991373233, -0.9969115616865911, -5.828298433516476, -7.643093990636554, -0.2550496908381308]
 
 #6350k, 80% dimmer, current piece
 pieceRGB = {

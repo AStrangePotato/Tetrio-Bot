@@ -102,6 +102,7 @@ def play(duration=float("inf"), weights=weights):
 
 
     while time.time() < startTime + duration:
+        time.sleep(random.uniform(0.1, 0.5))
         if keyboard.is_pressed('q'):
             break
 

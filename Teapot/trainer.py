@@ -1,83 +1,111 @@
 import random
-import math
+import numpy as np
+from copy import deepcopy
+from multiprocessing import Pool, cpu_count
 from game import TetrisGame
 from lib import heuristic
-import copy
+from lib.constants import pieces
 
-mutation_rate = 0.2 # %
-learning_rate = 0.1 # %
-rollout_duration = 7 #seconds
-population_size = 10 #agents
+# Known good weights (seed)
+SEED_WEIGHTS = [
+    -1.030,   # aggregate
+     0.760,   # increase tetris score after mvp
+    -0.420,   # bumpiness
+    -6.474,  # blockade
+    -1.942,  # tetris well
+    -2.420   # i piece dependencies
+]
 
-def mergeWeights(A, B):
-    n = len(A)
-    new = [0] * n
-    for i in range(n):
-        new[i] = (A[i] + B[i]) / 2
-        if random.uniform(0, 1) < mutation_rate:
-            new[i] += random.uniform(-1, 1) * learning_rate
-    
-    return new
+GENES = len(SEED_WEIGHTS)
+POPULATION_SIZE = 30
+GENERATIONS = 50
+ELITE_COUNT = 2
+TOURNAMENT_SIZE = 5
+BASE_MUTATION_RATE = 0.3
+BASE_MUTATION_SCALE = 1.5
 
-def evolve(population):
-    new_population = [population[0]]
-
-    for i in range(population_size-1):
-        parentA = math.floor(random.triangular(0, population_size-1, 3))
-        parentB = math.floor(random.triangular(0, population_size-1, 3))
-
-        child = mergeWeights(population[parentA], population[parentB])
-        new_population.append(child)
-    
-    return new_population
-
-
-def train_step(population):
-    outcomes = [] #(fitness, weights)
-    for agent in population:
-        fitness = evaluate(agent)
-        outcomes.append((fitness, agent))
-    
-    outcomes.sort(reverse=True)
-
-    next_generation = evolve([x[1] for x in outcomes])
-
-    return next_generation, outcomes[0]
-
-
-
+# --- Evaluation function (unchanged) ---
 def evaluate(weights):
-    game = TetrisGame()
+    scores = []
+    for trial in range(10):
+        game = TetrisGame()
+        for move in range(100):
+            piece = pieces[game.next_piece()]
+            best = [-float("inf"), -1, -1]
+            for rotation in range(len(piece)):
+                maxPos = 11 - len(piece[rotation][0])
+                for pos in range(maxPos):
+                    boardSnapshot = deepcopy(game.board)
+                    game.drop(piece[rotation], pos)
+                    score = heuristic.analyze(game.board, weights)
+                    if score > best[0]:
+                        best = [score, rotation, pos]
+                    game.set_board(boardSnapshot)
+            game.drop(piece[best[1]], best[2])
+            game.clear_lines()
+            if game.isGameOver():
+                break
+        scores.append(game.score)
+    return np.median(scores)
 
-    for move in range(100): #each bot gets 100 pieces
-        piece = game.next_piece()
+# --- GA functions ---
+def create_individual():
+    # Random small variation around seed weights
+    return [w + random.gauss(0, 0.5) for w in SEED_WEIGHTS]
 
-        best = [-float("inf"), -1, -1] 
+def mutate(individual, generation, max_generations):
+    # Mutation probability decays over generations
+    mutation_rate = BASE_MUTATION_RATE * (1 - generation / max_generations)
+    mutation_scale = BASE_MUTATION_SCALE * (1 - generation / max_generations)
+    for i in range(len(individual)):
+        if random.random() < mutation_rate:
+            individual[i] += random.gauss(0, mutation_scale)
+    return individual
 
-        for rotation in range(len(piece)):
-            maxPos = 11 - len(piece[rotation][0])
-            for pos in range(maxPos):
-                boardSnapshot = copy.deepcopy(boardMaster) #new instance
-                simulBoard = drop(piece[rotation], pos, boardSnapshot)
-                score = heuristic.analyze(simulBoard, weights)
+def crossover(parent1, parent2):
+    point = random.randint(1, GENES - 1)
+    return parent1[:point] + parent2[point:], parent2[:point] + parent1[point:]
 
-                if score > best[0]:
-                    best = [score, rotation, pos]
+def tournament_selection(fitness, k):
+    # Randomly choose k individuals and pick the best
+    selected = random.sample(fitness, k)
+    return max(selected, key=lambda x: x[1])[0]
 
-                simulBoard = boardSnapshot #revert instance
+def evaluate_population(population):
+    with Pool(cpu_count()) as pool:
+        scores = pool.map(evaluate, population)
+    return list(zip(population, scores))
 
+# --- Main GA loop ---
+def evolve():
+    # Initialize population around seed weights
+    population = [create_individual() for _ in range(POPULATION_SIZE)]
 
-    return game.score #sent lines 
+    for generation in range(GENERATIONS):
+        fitness = evaluate_population(population)
+        fitness.sort(key=lambda x: x[1], reverse=True)
+        print(f"Gen {generation}: Best score = {fitness[0][1]:.2f}, Weights = {fitness[0][0]}")
 
+        # Elitism: carry top performers
+        new_population = [deepcopy(fitness[i][0]) for i in range(ELITE_COUNT)]
 
-def train(weights, epochs=50):
-    population = evolve([weights for i in range(population_size)]) #initial pop
+        # Fill the rest using tournament selection, crossover, and mutation
+        while len(new_population) < POPULATION_SIZE:
+            parent1 = tournament_selection(fitness, TOURNAMENT_SIZE)
+            parent2 = tournament_selection(fitness, TOURNAMENT_SIZE)
+            child1, child2 = crossover(parent1, parent2)
+            new_population.append(mutate(child1, generation, GENERATIONS))
+            if len(new_population) < POPULATION_SIZE:
+                new_population.append(mutate(child2, generation, GENERATIONS))
 
-    for i in range(epochs):
-        new_population, king = train_step(population)
         population = new_population
 
-    return population
+    # Final evaluation
+    fitness = evaluate_population(population)
+    best_weights = max(fitness, key=lambda x: x[1])
+    print("Best final weights:", best_weights[0])
+    print("Best final score:", best_weights[1])
+    return best_weights[0]
 
-
-print(train([-0.6040088729980074, 1.2977144824191589, -0.5363367336570115, -2.8855510684311336, -0.9059300856666658, -0.2442835269184844]))
+if __name__ == "__main__":
+    evolve()
