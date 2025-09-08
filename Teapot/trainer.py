@@ -117,7 +117,7 @@ def tournament_selection(fitness, k):
 def evaluate_population(population):
     """Evaluates the entire population in parallel."""
     # Using cpu_count() to maximize utilization on your Ultra 9
-    with Pool(processes=12) as pool:
+    with Pool(processes=cpu_count()) as pool:
         scores = pool.map(evaluate, population)
     return list(zip(population, scores))
 
