@@ -21,13 +21,7 @@ class TetrisGame:
         if not self.queue:
             self.refill_bag()
         return self.queue.popleft()
-
-    def clear_lines(self):
-        self.board = [row for row in self.board if any(c == 0 for c in row)]
-        cleared = 20 - len(self.board)
-        self.board = [[0] * 10 for _ in range(cleared)] + self.board
-        self.score += [0, 1, 2, 4][cleared-1]
-
+    
     def is_valid_position(self, piece, row, col):
         for r_offset, r in enumerate(piece):
             for c_offset, tile in enumerate(r):
@@ -54,8 +48,17 @@ class TetrisGame:
                 break
         self.place_piece(piece, final_row, pos)
 
+    def clear_lines(self):
+        new_board = [row for row in self.board if any(c == 0 for c in row)]
+        cleared = 20 - len(new_board)
+        self.board = [[0] * 10 for _ in range(cleared)] + new_board
+        
+
+        score_map = {0: 0, 1: 100, 2: 300, 3: 500, 4: 800}
+        self.score += score_map.get(cleared, 0)
+
     def isGameOver(self):
-        return self.board[0] != [0] * 10
+        return any(self.board[0])
 
     def draw(self):
         visuals.draw(self.board)
