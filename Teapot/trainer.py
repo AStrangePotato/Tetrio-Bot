@@ -8,25 +8,26 @@ from lib.constants import pieces
 import sys
 
 # --- GA Hyperparameters (Tuned for better performance) ---
-SEED_WEIGHTS = [
-    -1.030,  # aggregate height
-    0.760,   # lines cleared
-    -0.420,  # bumpiness
-    -6.474,  # blockades
-    -1.942,  # tetris well
-    -2.420   # i piece dependencies
-]
+SEED_WEIGHTS = [-1.116, 2.221, -1.465, -7.495, 0.684, -0.798]
+# [
+#     -1.030,  # aggregate height
+#     0.760,   # lines cleared
+#     -0.420,  # bumpiness
+#     -6.474,  # blockades
+#     -1.942,  # tetris well
+#     -2.420   # i piece dependencies
+# ]
 
 GENES = len(SEED_WEIGHTS)
-POPULATION_SIZE = 100       # Increased for more exploration
+POPULATION_SIZE = 50       # Increased for more exploration
 GENERATIONS = 100           # Increased for a longer run
 ELITE_COUNT = 10            # Keep more of the best performers
 TOURNAMENT_SIZE = 8         # Slightly higher selection pressure
 MUTATION_RATE = 0.2         # Base chance for a gene to mutate
-MUTATION_SCALE = 0.5        # Max scale of mutation
-IMMIGRANT_COUNT = 10        # Number of new individuals per generation
+MUTATION_SCALE = 0.1        # Max scale of mutation
+IMMIGRANT_COUNT = 5        # Number of new individuals per generation
 GAME_MOVES = 500            # Increased for deeper evaluation
-GAME_TRIALS = 5             # Fewer trials but deeper games is often better
+GAME_TRIALS = 1             # Fewer trials but deeper games is often better
 
 # --- Evaluation function ---
 def evaluate(weights):
@@ -119,7 +120,7 @@ def tournament_selection(fitness, k):
 def evaluate_population(population):
     """Evaluates the entire population in parallel with clean Ctrl+C handling."""
     try:
-        with Pool(processes=2, maxtasksperchild=1) as pool:
+        with Pool(processes=3, maxtasksperchild=1) as pool:
             scores = pool.map(evaluate, population)
         return list(zip(population, scores))
     except KeyboardInterrupt:
