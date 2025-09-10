@@ -5,6 +5,7 @@ from multiprocessing import Pool, cpu_count
 from game import TetrisGame # Make sure your fixed TetrisGame class is in game.py
 from lib import heuristic
 from lib.constants import pieces
+import sys
 
 # --- GA Hyperparameters (Tuned for better performance) ---
 SEED_WEIGHTS = [
@@ -114,12 +115,18 @@ def tournament_selection(fitness, k):
     tournament_contestants = [fitness[i] for i in selected_indices]
     return max(tournament_contestants, key=lambda x: x[1])[0]
 
+
 def evaluate_population(population):
-    """Evaluates the entire population in parallel."""
-    # Using cpu_count() to maximize utilization on your Ultra 9
-    with Pool(processes=cpu_count()) as pool:
-        scores = pool.map(evaluate, population)
-    return list(zip(population, scores))
+    """Evaluates the entire population in parallel with clean Ctrl+C handling."""
+    try:
+        with Pool(processes=2, maxtasksperchild=1) as pool:
+            scores = pool.map(evaluate, population)
+        return list(zip(population, scores))
+    except KeyboardInterrupt:
+        print("\nKeyboardInterrupt caught. Terminating workers...")
+        pool.terminate()
+        pool.join()
+        sys.exit(1)
 
 # --- Main GA loop ---
 def evolve():
@@ -177,4 +184,5 @@ def evolve():
     return best_weights
 
 if __name__ == "__main__":
+    print("Begin training.")
     evolve()
